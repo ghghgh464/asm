@@ -1,125 +1,174 @@
-# PolyShop - Dự án Website E-commerce
+# MMO Services - Hệ thống quản lý dịch vụ MMO
 
-## Mô tả
-PolyShop là một website thương mại điện tử được xây dựng bằng PHP theo mô hình MVC, cung cấp giải pháp mua sắm trực tuyến hoàn chỉnh cho khách hàng và hệ thống quản trị cho admin.
+## 🎯 Mô tả
+MMO Services là một hệ thống web hoàn chỉnh để quản lý và bán các dịch vụ MMO (Make Money Online) với giao diện hiện đại, hệ thống đăng nhập/đăng ký, và admin panel chuyên nghiệp.
 
-## Công nghệ sử dụng
-- **Backend**: PHP 7.4+, MySQL
-- **Frontend**: HTML5, CSS3, JavaScript, Bootstrap 5
-- **Database**: MySQL với PDO
-- **Icons**: Font Awesome
-- **Server**: XAMPP/Laragon
+## ✨ Tính năng chính
 
-## Cấu trúc dự án
+### 🌐 Giao diện người dùng
+- **Trang chủ:** Hiển thị sản phẩm nổi bật với thiết kế responsive
+- **Danh mục sản phẩm:** Phân loại và tìm kiếm sản phẩm
+- **Giỏ hàng:** Quản lý đơn hàng và thanh toán
+- **Tìm kiếm:** Tìm kiếm sản phẩm theo từ khóa
+
+### 🔐 Hệ thống xác thực
+- **Đăng ký:** Tạo tài khoản mới với validation đầy đủ
+- **Đăng nhập:** Hỗ trợ cả user thường và admin
+- **Phân quyền:** Hiển thị thông tin khác nhau cho admin và user
+- **Đăng xuất:** Xử lý session an toàn
+
+### 🛡️ Admin Panel
+- **Dashboard:** Thống kê tổng quan với biểu đồ tròn và cột
+- **Quản lý sản phẩm:** CRUD sản phẩm, quản lý tồn kho
+- **Thống kê:** Bảng thống kê chi tiết với phần trăm và xu hướng
+- **Giao diện:** Theme hiện đại phù hợp với trang chủ
+
+## 🚀 Cài đặt
+
+### 1. Yêu cầu hệ thống
+- PHP >= 7.4
+- MySQL >= 5.7
+- XAMPP/WAMP/LAMP
+
+### 2. Cài đặt database
+```sql
+-- Import file database.sql để tạo cấu trúc cơ bản
+-- Import file admin/setup_admin.sql để thiết lập admin panel
 ```
-tf/
-├── assets/          # CSS, JS, Images
-├── config/          # Cấu hình database và ứng dụng
-├── controllers/     # Controllers theo MVC
-├── models/          # Models (Connect, Categories, Products, Users, Comments)
-├── views/           # Views theo MVC
-├── admin/           # Trang quản trị (sẽ tạo)
-├── includes/        # Header, Footer, Sidebar
-├── uploads/         # Upload hình ảnh
-├── database/        # SQL schema và dữ liệu mẫu
-└── index.php        # Trang chủ
+
+### 3. Cấu hình database
+Chỉnh sửa file `admin/config/config.php`:
+```php
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'mmo');        // Tên database của bạn
+define('DB_USER', 'root');       // Username database
+define('DB_PASS', '');           // Password database
 ```
 
-## Giai đoạn phát triển
+### 4. Cấu hình web server
+- Copy toàn bộ thư mục vào `htdocs` (XAMPP) hoặc `www` (WAMP)
+- Truy cập: `http://localhost/3cham/`
 
-### Giai đoạn 1: Phân tích và thiết kế ✅
-- [x] Nghiên cứu yêu cầu khách hàng
-- [x] Phân tích yêu cầu khách hàng
-- [x] Thiết kế layout website với Figma
-- [x] Thiết kế database (ERD)
-- [x] Xây dựng model cơ bản
+## 👥 Tài khoản mặc định
 
-### Giai đoạn 2: Website hoàn thiện 🚧
-- [x] Hoàn thiện website dành cho khách hàng
-  - [x] Trang chủ (homepage)
-  - [x] Trang danh sách sản phẩm (products)
-  - [x] Trang chi tiết sản phẩm (product-detail)
-  - [x] Trang tìm kiếm (search)
-  - [x] Trang giới thiệu (about)
-  - [x] Trang liên hệ (contact)
-- [x] Chức năng đăng nhập/đăng ký
-- [x] Quản lý thông tin cá nhân
-- [x] Đổi mật khẩu
-- [x] Chức năng bình luận sản phẩm
-- [ ] Trang quản trị admin
-  - [ ] Quản lý danh mục
-  - [ ] Quản lý sản phẩm
-  - [ ] Quản lý tài khoản
-  - [ ] Quản lý người dùng
-  - [ ] Quản lý bình luận
-- [ ] Hoàn thiện document báo cáo dự án
-- [ ] Hoàn thiện slide báo cáo dự án
+### 🔑 Admin
+- **Username:** `admin`
+- **Password:** `admin1234`
+- **Quyền:** Toàn quyền quản trị hệ thống
 
-## Tính năng chính
+### 👤 User thường
+- **Username:** `user1`, `user2`, `user3`
+- **Password:** `123456`
+- **Quyền:** Xem sản phẩm, đặt hàng
 
-### Khách hàng
-- Xem danh sách sản phẩm theo danh mục
-- Tìm kiếm sản phẩm
-- Xem chi tiết sản phẩm
-- Đăng ký và đăng nhập tài khoản
-- Cập nhật thông tin cá nhân
-- Đổi mật khẩu
-- Bình luận và đánh giá sản phẩm
-- Giỏ hàng (placeholder)
+## 📁 Cấu trúc thư mục
 
-### Admin (sẽ phát triển)
-- Quản lý danh mục sản phẩm
-- Quản lý sản phẩm
-- Quản lý người dùng
-- Quản lý bình luận
-- Thống kê bán hàng
+```
+3cham/
+├── admin/                      # Admin Panel
+│   ├── assets/css/            # CSS cho admin
+│   ├── config/                # Cấu hình database
+│   ├── controllers/           # Xử lý admin
+│   ├── views/                 # Giao diện admin
+│   ├── dashboard.php          # Dashboard chính
+│   ├── products.php           # Quản lý sản phẩm
+│   └── setup_admin.sql        # Database admin
+├── assets/                     # Tài nguyên frontend
+│   ├── css/                   # Stylesheet chính
+│   └── images/                # Hình ảnh sản phẩm
+├── Controller/                 # Controllers chính
+├── Model/                      # Models database
+├── Views/                      # Views frontend
+│   ├── login.php              # Trang đăng nhập
+│   ├── register.php           # Trang đăng ký
+│   └── ...                    # Các view khác
+├── index.php                   # File chính
+├── logout.php                  # Xử lý đăng xuất
+└── README.md                   # Hướng dẫn này
+```
 
-## Cài đặt
+## 🔧 Sử dụng
 
-### Yêu cầu hệ thống
-- PHP 7.4 trở lên
-- MySQL 5.7 trở lên
-- XAMPP hoặc Laragon
+### Đăng nhập/Đăng ký
+1. **Đăng ký:** Truy cập `?page=register` để tạo tài khoản mới
+2. **Đăng nhập:** Truy cập `?page=login` với tài khoản đã có
+3. **Phân quyền:** Hệ thống tự động nhận diện admin/user
 
-### Hướng dẫn cài đặt
-1. Clone dự án về máy
-2. Import file `database/polyshop.sql` vào MySQL
-3. Cấu hình database trong `config/database.php`
-4. Khởi động web server
-5. Truy cập website
+### Admin Panel
+1. Đăng nhập với tài khoản admin
+2. Truy cập `admin/dashboard.php`
+3. Quản lý sản phẩm, xem thống kê, biểu đồ
 
-### Tài khoản mặc định
-- **Admin**: admin / password
-- **Email**: admin@polyshop.com
+### Quản lý sản phẩm
+- **Thêm sản phẩm:** `admin/product-add.php`
+- **Sửa/Xóa:** Từ trang `admin/products.php`
+- **Thống kê:** Dashboard hiển thị tổng quan
 
-## Cấu trúc Database
+## 🎨 Tùy chỉnh
 
-### Bảng chính
-- **categories**: Danh mục sản phẩm
-- **products**: Sản phẩm
-- **users**: Người dùng
-- **comments**: Bình luận
+### Thay đổi theme
+- **Frontend:** Chỉnh sửa `assets/css/style.css`
+- **Admin:** Chỉnh sửa `admin/assets/css/admin-style.css`
 
-### Quan hệ
-- Products → Categories (Many-to-One)
-- Comments → Products (Many-to-One)
-- Comments → Users (Many-to-One)
+### Thêm biểu đồ mới
+Sử dụng Chart.js trong dashboard:
+```javascript
+new Chart(ctx, {
+    type: 'line', // hoặc 'bar', 'pie', 'doughnut'
+    data: { /* dữ liệu */ },
+    options: { /* tùy chọn */ }
+});
+```
 
-## Bảo mật
-- Sử dụng PDO với prepared statements
-- Hash mật khẩu với password_hash()
-- CSRF protection
+## 🔒 Bảo mật
+
+### Tính năng bảo mật
+- Password hashing với bcrypt
+- Session management an toàn
 - Input validation và sanitization
-- Session management
+- CSRF protection
 
-## Hiệu suất
-- Database indexing
-- GZIP compression
-- Browser caching
-- Optimized queries
+### Khuyến nghị
+- Thay đổi password mặc định
+- Sử dụng HTTPS trong production
+- Backup database thường xuyên
+- Cập nhật PHP và MySQL
 
-## Đóng góp
-Dự án này được phát triển cho mục đích học tập và nghiên cứu.
+## 🐛 Xử lý lỗi
 
-## Giấy phép
-MIT License
+### Lỗi thường gặp
+1. **Không kết nối database:** Kiểm tra cấu hình trong `admin/config/config.php`
+2. **Lỗi session:** Đảm bảo PHP session được bật
+3. **Lỗi permission:** Kiểm tra quyền ghi file
+
+### Debug
+- Kiểm tra log PHP error
+- Xác nhận cấu hình database
+- Kiểm tra quyền truy cập file
+
+## 📞 Hỗ trợ
+
+Nếu gặp vấn đề:
+1. Kiểm tra log PHP error
+2. Xác nhận cấu hình database
+3. Kiểm tra quyền truy cập file
+4. Đảm bảo PHP version >= 7.4
+
+## 📄 Phiên bản
+- **Version:** 2.0
+- **Cập nhật:** 13/08/2025
+- **Tương thích:** PHP 7.4+, MySQL 5.7+
+
+## 📝 Changelog
+
+### Version 2.0 (13/08/2025)
+- ✅ Thêm hệ thống đăng nhập/đăng ký hoàn chỉnh
+- ✅ Cải thiện admin panel với biểu đồ và thống kê
+- ✅ Thêm nút hiện mật khẩu
+- ✅ Phân quyền admin/user
+- ✅ Giao diện responsive và hiện đại
+
+### Version 1.0
+- ✅ Hệ thống quản lý sản phẩm cơ bản
+- ✅ Giao diện frontend
+- ✅ Admin panel đơn giản 

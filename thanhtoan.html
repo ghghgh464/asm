@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phương Thức Thanh Toán - MMO Services</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1db954;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --card-bg: #fff;
+            --border-color: #dee2e6;
+        }
+
+        [data-bs-theme="dark"] {
+            --primary-color: #1ed760;
+            --text-color: #fff;
+            --bg-color: #121212;
+            --card-bg: #1a1a1a;
+            --border-color: #2d2d2d;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .payment-method {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: var(--card-bg);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%; /* Ensure equal height */
+        }
+
+        .payment-method:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .payment-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .payment-info {
+            background-color: rgba(29, 185, 84, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .payment-info p {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .payment-info .label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .payment-info .value {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background-color: rgba(29, 185, 84, 0.1);
+        }
+
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .qr-amount {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        .show-qr-btn {
+            width: 100%;
+            margin-top: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .show-qr-btn:hover {
+            background-color: #1ed760;
+            transform: translateY(-2px);
+        }
+
+        .qr-container.hidden {
+            display: none;
+        }
+
+        .qr-container.visible {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-to-home {
+            margin-top: 30px;
+        }
+
+        .amount-input {
+            margin: 15px 0;
+        }
+
+        .amount-input input {
+            width: 200px;
+            text-align: right;
+            padding-right: 10px;
+        }
+
+        .payment-instructions {
+            background-color: rgba(29, 185, 84, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .payment-instructions ol {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+
+        .payment-instructions li {
+            margin-bottom: 8px;
+        }
+
+        .order-summary {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .order-summary h3 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .order-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .payment-method {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">MMO Services</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="thanhtoan.html">Thanh toán</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Phương Thức Thanh Toán</h1>
+        
+        <!-- Order Summary Section -->
+        <div class="order-summary">
+            <h3>Thông tin đơn hàng</h3>
+            <div id="orderItems">
+                <!-- Order items will be inserted here -->
+            </div>
+            <div class="order-total">
+                <div class="d-flex justify-content-between">
+                    <span>Tổng cộng:</span>
+                    <span id="orderTotal">0 VND</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Chuyển khoản ngân hàng -->
+            <div class="col-md-6 mb-4">
+                <div class="payment-method">
+                    <img src="assets/images/mb bank.png" alt="MB Bank" class="payment-logo">
+                    <h3><i class="fas fa-university me-2"></i>Chuyển khoản ngân hàng</h3>
+                    <div class="payment-info">
+                        <p>
+                            <span class="label">Ngân hàng:</span>
+                            <span class="value">MB Bank</span>
+                        </p>
+                        <p>
+                            <span class="label">Số tài khoản:</span>
+                            <span class="value">
+                                <span id="bankAccount">69069696969</span>
+                                <button class="copy-btn" onclick="copyToClipboard('bankAccount')">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </span>
+                        </p>
+                        <p>
+                            <span class="label">Chủ tài khoản:</span>
+                            <span class="value">NGUYEN THE HUY</span>
+                        </p>
+                        <p>
+                            <span class="label">Số tiền:</span>
+                            <span class="value" id="bankAmountDisplay">0 VND</span>
+                        </p>
+                        <p>
+                            <span class="label">Nội dung:</span>
+                            <span class="value">
+                                <span id="transferMessage">THANHTOAN</span>
+                                <button class="copy-btn" onclick="copyToClipboard('transferMessage')">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="qr-container">
+                        <div id="bankQR" class="qr-code"></div>
+                        <div class="qr-amount">
+                            Quét mã để thanh toán<br>
+                            <span id="bankQRAmount">0 VND</span>
+                        </div>
+                    </div>
+                    <div class="payment-instructions">
+                        <ol>
+                            <li>Chuyển khoản đúng số tiền và nội dung</li>
+                            <li>Sau khi chuyển khoản, vui lòng gửi ảnh chụp màn hình xác nhận</li>
+                            <li>Chúng tôi sẽ xác nhận và gửi sản phẩm trong thời gian sớm nhất</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Momo -->
+            <div class="col-md-6 mb-4">
+                <div class="payment-method">
+                    <img src="assets/images/momo.png" alt="Momo" class="payment-logo">
+                    <h3><i class="fas fa-mobile-alt me-2"></i>Ví điện tử Momo</h3>
+                    <div class="payment-info">
+                        <p>
+                            <span class="label">Số điện thoại:</span>
+                            <span class="value">
+                                <span id="momoPhone">0363254644</span>
+                                <button class="copy-btn" onclick="copyToClipboard('momoPhone')">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </span>
+                        </p>
+                        <p>
+                            <span class="label">Chủ tài khoản:</span>
+                            <span class="value">NGUYEN THE HUY</span>
+                        </p>
+                        <p>
+                            <span class="label">Số tiền:</span>
+                            <span class="value" id="momoAmountDisplay">0 VND</span>
+                        </p>
+                        <p>
+                            <span class="label">Nội dung:</span>
+                            <span class="value">
+                                <span id="momoMessage">THANHTOAN</span>
+                                <button class="copy-btn" onclick="copyToClipboard('momoMessage')">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="qr-container">
+                        <div id="momoQR" class="qr-code"></div>
+                        <div class="qr-amount">
+                            Quét mã để thanh toán<br>
+                            <span id="momoQRAmount">0 VND</span>
+                        </div>
+                    </div>
+                    <div class="payment-instructions">
+                        <ol>
+                            <li>Mở ứng dụng Momo và quét mã QR</li>
+                            <li>Kiểm tra số tiền và thông tin người nhận</li>
+                            <li>Xác nhận thanh toán</li>
+                            <li>Gửi ảnh chụp màn hình xác nhận cho chúng tôi</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center back-to-home mt-4 mb-4">
+            <a href="index.html" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> Quay lại trang chủ
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light mt-5 py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>Về chúng tôi</h5>
+                    <p>Cung cấp các dịch vụ MMO uy tín, chất lượng với giá cả hợp lý.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Liên hệ</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-phone text-success me-2"></i>
+                            Hotline: <a href="tel:0363254644" class="text-light text-decoration-none">0363254644</a>
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-envelope text-success me-2"></i>
+                            Email: <a href="mailto:nhimhung412@gmail.com" class="text-light text-decoration-none">nhimhung412@gmail.com</a>
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-clock text-success me-2"></i>
+                            Giờ làm việc: 24/7
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Theo dõi chúng tôi</h5>
+                    <div class="social-links mt-3">
+                        <a href="#" class="text-light me-3"><i class="fab fa-facebook fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0">© 2024 MMO Services. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Update payment information and generate QR codes
+        function updatePaymentInfo() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const formattedTotal = total.toLocaleString() + ' VND';
+
+            // Update all amount displays
+            const amountElements = [
+                'orderTotal',
+                'bankAmountDisplay',
+                'momoAmountDisplay',
+                'momoQRAmount',
+                'bankQRAmount'
+            ];
+            
+            amountElements.forEach(id => {
+                document.getElementById(id).textContent = formattedTotal;
+            });
+
+            // Generate QR codes
+            generateQRCodes(total);
+        }
+
+        // Generate QR codes
+        function generateQRCodes(amount) {
+            // Bank QR Code
+            const bankQRContainer = document.getElementById('bankQR');
+            const bankData = {
+                bank: "970422", // MB Bank BIN code
+                account: "69069696969",
+                name: "NGUYEN THE HUY",
+                amount: amount,
+                message: "THANHTOAN"
+            };
+
+            // Create bank QR image
+            const bankQRImage = document.createElement('img');
+            bankQRImage.src = `https://api.vietqr.io/image/${bankData.bank}-${bankData.account}-compact.jpg?amount=${bankData.amount}&addInfo=${bankData.message}&accountName=${encodeURIComponent(bankData.name)}`;
+            bankQRImage.alt = "MB Bank QR Code";
+            bankQRImage.style.width = "200px";
+            bankQRImage.style.height = "200px";
+            
+            bankQRContainer.innerHTML = '';
+            bankQRContainer.appendChild(bankQRImage);
+
+            // Momo QR Code
+            const momoQRContainer = document.getElementById('momoQR');
+            const momoData = {
+                phoneNumber: "0363254644",
+                name: "NGUYEN THE HUY",
+                amount: amount,
+                message: "THANHTOAN"
+            };
+
+            // Create Momo QR image
+            const momoQRImage = document.createElement('img');
+            momoQRImage.src = `https://momosv3.apimienphi.com/api/QRCode?phone=${momoData.phoneNumber}&amount=${momoData.amount}`;
+            momoQRImage.alt = "Momo QR Code";
+            momoQRImage.style.width = "200px";
+            momoQRImage.style.height = "200px";
+            
+            momoQRContainer.innerHTML = '';
+            momoQRContainer.appendChild(momoQRImage);
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const orderItems = document.getElementById('orderItems');
+
+            // Display order items
+            orderItems.innerHTML = cart.map(item => `
+                <div class="order-item">
+                    <span>${item.name} x ${item.quantity}</span>
+                    <span>${(item.price * item.quantity).toLocaleString()} VND</span>
+                </div>
+            `).join('');
+
+            // Update payment info and generate QR codes
+            updatePaymentInfo();
+        });
+
+        // Listen for cart changes
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'cart') {
+                updatePaymentInfo();
+            }
+        });
+
+        // Copy to clipboard function
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Đã sao chép vào clipboard!');
+            }).catch(err => {
+                console.error('Lỗi khi sao chép: ', err);
+                showToast('Không thể sao chép. Vui lòng thử lại!');
+            });
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast position-fixed bottom-0 end-0 m-3';
+            toast.innerHTML = `
+                <div class="toast-header">
+                    <strong class="me-auto">Thông báo</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>
+            `;
+            document.body.appendChild(toast);
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Theme switch
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            document.querySelector('html').setAttribute('data-bs-theme', currentTheme);
+        }
+    </script>
+</body>
+</html>
